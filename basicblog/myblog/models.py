@@ -1,33 +1,31 @@
 from django.db import models
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 import uuid # Required for unique blog post comments
+from django.contrib.auth.models import User
 
-class User(models.Model):
-	"""Model representing a user."""
-	username = models.CharField(max_length=100)
-	
-	location = models.CharField(max_length=100)
+class BlogAuthor(models.Model):
+    username = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    location = models.CharField(max_length=100)
+    date_of_birth = models.DateField(null=True, blank=True)
+    bio = models.CharField(max_length=500)
 
-	date_of_birth = models.DateField(null=True, blank=True)
+    class Meta:
+        ordering = ['username']
 
-	bio = models.CharField(max_length=500)
+    def get_absolute_url(self):
+        """Returns the url to access a particular user."""
+        return reverse('user-detail', args=[str(self.id)])
 
-	class Meta:
-		ordering = ['username']
-
-	def get_absolute_url(self):
-		"""Returns the url to access a particular user."""
-		return reverse('user-detail', args=[str(self.id)])
-
-	def __str__(self):
-		"""String for representing the Model object."""
-		return f'{self.username}'
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.username}'
 
 class BlogPost(models.Model):
     """Model representing a blog post."""
     title = models.CharField(max_length=100)
 
-    author = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey('BlogAuthor', on_delete=models.SET_NULL, null=True)
 
     date = models.DateField(null=True, blank=True)
 
@@ -40,13 +38,13 @@ class BlogPost(models.Model):
         """Returns the url to access a particular blog post."""
         return reverse('blog-post-detail', args=[str(self.id)]) 
 
-class Comment(models.Model):
+class BlogComment(models.Model):
     """Model representing a comment on a blog post."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this blog post comment')
 
     blog_post = models.ForeignKey('BlogPost', on_delete=models.SET_NULL, null=True)
 
-    author = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey('BlogAuthor', on_delete=models.SET_NULL, null=True)
 
     date = models.DateField(null=True, blank=True)
 
