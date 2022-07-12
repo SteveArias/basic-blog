@@ -4,14 +4,13 @@ import uuid # Required for unique blog post comments
 from django.contrib.auth.models import User
 
 class BlogAuthor(models.Model):
-    username = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     location = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
     bio = models.CharField(max_length=500)
 
     class Meta:
-        ordering = ['username']
+        ordering = ['user']
 
     def get_absolute_url(self):
         """Returns the url to access a particular user."""
