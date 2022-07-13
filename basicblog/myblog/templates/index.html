@@ -1,0 +1,18 @@
+{% extends "base_generic.html"%}
+
+{% block title %}
+    <title>My Blog</title>
+{% endblock %}
+
+{% block content %}
+    <h1>My Blog Home</h1>
+    <p>Welcome to My Blog, a website developed by Steve Arias!</p>
+    <h2>Dynamic content</h2>
+    <p>The blog website has the following record counts:</p>
+    <ul>
+        <li><strong>Blog Posts:</strong> {{ num_blog_posts }}</li>
+        <li><strong>Authors:</strong> {{ num_authors }}</li>
+    </ul>
+
+    <p>You have visited this site {{ num_visits }} times.</p>
+{% endblock %}
