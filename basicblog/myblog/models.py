@@ -18,7 +18,7 @@ class BlogAuthor(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return f'{self.username}'
+        return f'{self.user}'
 
 class BlogPost(models.Model):
     """Model representing a blog post."""
@@ -35,7 +35,11 @@ class BlogPost(models.Model):
     
     def get_absolute_url(self):
         """Returns the url to access a particular blog post."""
-        return reverse('blog-post-detail', args=[str(self.id)]) 
+        return reverse('blog-post-detail', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.title}'
 
 class BlogComment(models.Model):
     """Model representing a comment on a blog post."""
@@ -43,7 +47,7 @@ class BlogComment(models.Model):
 
     blog_post = models.ForeignKey('BlogPost', on_delete=models.SET_NULL, null=True)
 
-    author = models.ForeignKey('BlogAuthor', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     date = models.DateField(null=True, blank=True)
 
